@@ -105,6 +105,8 @@
         async function checkPenNumber(event) {
             event.preventDefault(); // Prevent form submission
 
+            alert("Checking pen number..."); // This will alert when the function is triggered
+
             const penNumber = document.getElementById("pen_number").value.trim();
             const penNumbers = await fetchPenNumbers();
 
