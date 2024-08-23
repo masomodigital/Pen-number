@@ -69,48 +69,60 @@
         }
     </style>
     <script>
-        const GITHUB_TOKEN = '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'; // Your GitHub token
+        const GITHUB_TOKEN = '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'; // Replace with your GitHub token
         const GIST_ID = 'f2991e3f6d73dccee9eb89c107f95b41'; // Your Gist ID
         const FILE_NAME = 'Pennumbers.json'; // JSON file name in the Gist
 
         async function fetchPenNumbers() {
-            const response = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
-                headers: {
-                    'Authorization': `token ${GITHUB_TOKEN}`
-                }
-            });
-            const data = await response.json();
-            return JSON.parse(data.files[FILE_NAME].content).penNumbers;
+            try {
+                const response = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`
+                    }
+                });
+                if (!response.ok) throw new Error('Failed to fetch pen numbers.');
+                
+                const data = await response.json();
+                return JSON.parse(data.files[FILE_NAME].content).penNumbers;
+            } catch (error) {
+                alert(`Error fetching pen numbers: ${error.message}`);
+                console.error(error);
+            }
         }
 
         async function savePenNumbers(penNumbers) {
-            const response = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
-                method: 'PATCH',
-                headers: {
-                    'Authorization': `token ${GITHUB_TOKEN}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    files: {
-                        [FILE_NAME]: {
-                            content: JSON.stringify({ penNumbers }, null, 2)
+            try {
+                const response = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        files: {
+                            [FILE_NAME]: {
+                                content: JSON.stringify({ penNumbers }, null, 2)
+                            }
                         }
-                    }
-                })
-            });
+                    })
+                });
 
-            return response.ok;
+                if (!response.ok) throw new Error('Failed to save pen numbers.');
+                return response.ok;
+            } catch (error) {
+                alert(`Error saving pen numbers: ${error.message}`);
+                console.error(error);
+            }
         }
 
         async function checkPenNumber(event) {
             event.preventDefault(); // Prevent form submission
 
-            alert("Checking pen number..."); // This will alert when the function is triggered
-
             const penNumber = document.getElementById("pen_number").value.trim();
+            alert("Checking pen number..."); // Notify user that check is in progress
             const penNumbers = await fetchPenNumbers();
 
-            if (penNumbers.includes(penNumber)) {
+            if (penNumbers && penNumbers.includes(penNumber)) {
                 // Remove the pen number from the list
                 const updatedPenNumbers = penNumbers.filter(num => num !== penNumber);
                 const saved = await savePenNumbers(updatedPenNumbers);
