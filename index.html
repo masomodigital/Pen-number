@@ -70,7 +70,7 @@
     </style>
     <script>
         const GITHUB_TOKEN = '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'; // Replace with your GitHub token
-        const GIST_ID = 'f2991e3f6d73dccee9eb89c107f95b41'; // Your Gist ID
+        const GIST_ID = 'f2991e3f6d73dccee9eb89c107f95b41'; // Replace with your Gist ID
         const FILE_NAME = 'Pennumbers.json'; // JSON file name in the Gist
 
         async function fetchPenNumbers() {
@@ -81,9 +81,11 @@
                     }
                 });
                 if (!response.ok) throw new Error('Failed to fetch pen numbers.');
-                
+
                 const data = await response.json();
-                return JSON.parse(data.files[FILE_NAME].content).penNumbers;
+                const penNumbers = JSON.parse(data.files[FILE_NAME].content).penNumbers;
+                console.log("Fetched pen numbers:", penNumbers); // Log the pen numbers
+                return penNumbers;
             } catch (error) {
                 alert(`Error fetching pen numbers: ${error.message}`);
                 console.error(error);
@@ -91,28 +93,22 @@
         }
 
         async function savePenNumbers(penNumbers) {
-            try {
-                const response = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Authorization': `token ${GITHUB_TOKEN}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        files: {
-                            [FILE_NAME]: {
-                                content: JSON.stringify({ penNumbers }, null, 2)
-                            }
+            const response = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `token ${GITHUB_TOKEN}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    files: {
+                        [FILE_NAME]: {
+                            content: JSON.stringify({ penNumbers }, null, 2)
                         }
-                    })
-                });
+                    }
+                })
+            });
 
-                if (!response.ok) throw new Error('Failed to save pen numbers.');
-                return response.ok;
-            } catch (error) {
-                alert(`Error saving pen numbers: ${error.message}`);
-                console.error(error);
-            }
+            return response.ok;
         }
 
         async function checkPenNumber(event) {
@@ -120,6 +116,7 @@
 
             const penNumber = document.getElementById("pen_number").value.trim();
             alert("Checking pen number..."); // Notify user that check is in progress
+            console.log("User entered pen number:", penNumber); // Log the user input
             const penNumbers = await fetchPenNumbers();
 
             if (penNumbers && penNumbers.includes(penNumber)) {
