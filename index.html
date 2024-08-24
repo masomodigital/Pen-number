@@ -3,10 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple HTML Test</title>
+    <title>Simple Pen Number Form</title>
 </head>
 <body>
-    <h1>Testing Page</h1>
-    <p>If you see this text, your HTML is working correctly.</p>
+    <h1>Pen Number Submission</h1>
+    <form onsubmit="return false;">
+        <label for="pen_number">Pen Number:</label>
+        <input type="text" id="pen_number" name="pen_number" required>
+        <br><br>
+        <button type="submit">Submit</button>
+    </form>
 </body>
 </html>
