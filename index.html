@@ -3,16 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Pen Number Form</title>
+    <title>Pen Number Submission</title>
     <script>
-        function showAlert() {
-            alert("JavaScript is working!");
+        const GITHUB_TOKEN = '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'; // Your GitHub token
+        const GIST_ID = 'f2991e3f6d73dccee9eb89c107f95b41'; // Your Gist ID
+        const FILE_NAME = 'Pennumbers.json'; // JSON file name in the Gist
+
+        async function fetchPenNumbers() {
+            try {
+                const response = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`
+                    }
+                });
+                const data = await response.json();
+                const penNumbers = JSON.parse(data.files[FILE_NAME].content).penNumbers;
+                alert("Fetched pen numbers: " + penNumbers.join(", "));
+            } catch (error) {
+                console.error("Error fetching pen numbers:", error);
+                alert("Error fetching pen numbers: " + error.message);
+            }
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault(); // Prevent form submission
+            fetchPenNumbers(); // Fetch and display pen numbers
         }
     </script>
 </head>
 <body>
     <h1>Pen Number Submission</h1>
-    <form onsubmit="showAlert(); return false;">
+    <form onsubmit="handleSubmit(event);">
         <label for="pen_number">Pen Number:</label>
         <input type="text" id="pen_number" name="pen_number" required>
         <br><br>
