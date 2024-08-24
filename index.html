@@ -4,10 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple Pen Number Form</title>
+    <script>
+        function showAlert() {
+            alert("JavaScript is working!");
+        }
+    </script>
 </head>
 <body>
     <h1>Pen Number Submission</h1>
-    <form onsubmit="return false;">
+    <form onsubmit="showAlert(); return false;">
         <label for="pen_number">Pen Number:</label>
         <input type="text" id="pen_number" name="pen_number" required>
         <br><br>
