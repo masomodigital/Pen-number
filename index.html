@@ -5,73 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Check Pen Number</title>
     <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        .container {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        h1 {
-            color: darkgreen;
-        }
-
-        button {
-            margin-top: 10px;
-            background-color: red;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: darkred;
-        }
-
-        #congratsMessage {
-            display: none; /* Hidden by default */
-            background-color: #d4edda;
-            color: #155724;
-            padding: 20px;
-            border: 1px solid #c3e6cb;
-            margin-top: 20px;
-            border-radius: 5px;
-            text-align: center;
-        }
-
-        #congratsMessage button {
-            background-color: green;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 15px;
-        }
-
-        #congratsMessage button:hover {
-            background-color: darkgreen;
-        }
-
-        #logo {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        #errorMessage {
-            color: red;
-            font-weight: bold;
-        }
+        /* Your existing CSS styles */
     </style>
     <script>
         const GITHUB_TOKEN = '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'; // Your GitHub token
@@ -86,7 +20,13 @@
                     }
                 });
                 const data = await response.json();
-                return JSON.parse(data.files[FILE_NAME].content).penNumbers;
+                console.log("Available files:", data.files); // Log available files for debugging
+
+                if (data.files[FILE_NAME]) {
+                    return JSON.parse(data.files[FILE_NAME].content).penNumbers;
+                } else {
+                    throw new Error(`File "${FILE_NAME}" not found.`);
+                }
             } catch (error) {
                 console.error("Error fetching pen numbers:", error);
                 alert("Error fetching pen numbers: " + error.message);
@@ -154,28 +94,6 @@
     </script>
 </head>
 <body>
-    <!-- Centered logo at the top -->
-    <div id="logo">
-        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgTmvbQ8PO3QEmNBLuNDGJsOEha8rictP5-rmbG0qYp5qQe3QMEhoogK84OdxPgNB5iwytY-lpQT7E7AY4kpvmMGqK6CUrAHaXXhOj7CjXvKSu71HjYyy9NQ_Oh4CuCC_l97lDW3A9HF2eU670xt5mv83zx2OqCG_Is4zPpdYJ4JUaM14-2AZyEXOBktJE/w92-h84/logo.png" alt="Logo">
-    </div>
-
-    <div class="container">
-        <h1>Enter Your Pen Number</h1>
-        <form onsubmit="checkPenNumber(event)">
-            <label for="pen_number">Pen Number:</label>
-            <input type="text" id="pen_number" name="pen_number" required>
-            <br>
-            <button type="submit">Submit</button>
-        </form>
-        <p id="errorMessage"></p>
-
-        <!-- Hidden congratulations message -->
-        <div id="congratsMessage">
-            <h2>Congrats! Your pen is available!</h2>
-            <p>You will get 1 month access to CBC Digital Library.</p>
-            <p>Click the Submit button below to submit your name and email address for App Activation.</p>
-            <button onclick="window.location.href='https://docs.google.com/forms/d/e/1FAIpQLSdmzDBRrxMGLEBmQo5a6lAoIOhl5yXtzd-vfm-DDcGqFVOj2w/viewform'">Submit</button>
-        </div>
-    </div>
+    <!-- Your existing HTML structure -->
 </body>
 </html>
