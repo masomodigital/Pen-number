@@ -16,7 +16,21 @@
                         'Authorization': `token ${GITHUB_TOKEN}`
                     }
                 });
+                
+                // Check if the response is okay
+                if (!response.ok) {
+                    throw new Error('Failed to fetch the Gist');
+                }
+
                 const data = await response.json();
+                console.log("Gist Response:", data); // Log the response to the console
+                
+                // Check if the file exists
+                if (!data.files || !data.files[FILE_NAME]) {
+                    throw new Error(`File ${FILE_NAME} not found in Gist`);
+                }
+                
+                // Parse the pen numbers from the JSON content
                 const penNumbers = JSON.parse(data.files[FILE_NAME].content).penNumbers;
                 alert("Fetched pen numbers: " + penNumbers.join(", "));
             } catch (error) {
